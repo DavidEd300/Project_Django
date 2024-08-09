@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 class CustomUserCreationForm(forms.ModelForm):
@@ -30,3 +31,23 @@ class CustomUserCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class EditUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+    def __init__(self, *args, **kwargs):
+        super(EditUserForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'placeholder': 'Novo nome de usuário'})
+        self.fields['email'].widget.attrs.update({'placeholder': 'Novo email'})
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomPasswordChangeForm, self).__init__(*args, **kwargs)
+        self.fields['old_password'].widget.attrs.update({'placeholder': 'Senha atual', 'class': 'form-control'})
+        self.fields['new_password1'].widget.attrs.update({'placeholder': 'Nova senha', 'class': 'form-control'})
+        self.fields['new_password2'].widget.attrs.update({'placeholder': 'Confirme a nova senha', 'class': 'form-control'})

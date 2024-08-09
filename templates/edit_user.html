@@ -10,18 +10,22 @@
 </head>
 
 <body>
-    <h1>{{ welcome_message }}</h1>
+    <h1>Editar Informações do Usuário</h1>
 
-<p>
-    <a href="{% url 'edit_user' %}" class="btn btn-info">Editar Informações do Usuário</a>
-</p>
+<form method="POST">
+    {% csrf_token %}
+    
+    <h3>Alterar Nome de Usuário e Email</h3>
+    {{ user_form.as_p }}
+    
+    <h3>Alterar Senha</h3>
+    {{ password_form.as_p }}
+    
+    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+</form>
 
-<h2>Lista de Usuários Cadastrados:</h2>
-<ul>
-    {% for user in all_users %}
-        <li>{{ user.username }} - {{ user.email }}</li>
-    {% endfor %}
-</ul>
+    </ul>
+
 </body>
     <a href="{% url 'logout' %}">Sair</a>
 </html>

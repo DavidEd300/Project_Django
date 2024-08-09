@@ -29,6 +29,10 @@
                 <label for="confirm-password">Confirme a Senha</label>
                 <input type="password" id="confirmarSenha" name="confirm_password" required>
             </div>
+            <div class="checkbox">
+                <label for="is_superuser">É Superusuário?</label>
+                <input type="checkbox" id="is_superuser" name="is_superuser">
+            </div>
             <button type="submit" id="register-btn">{{ register_button_text }}</button>
             <a href="{% url 'login' %}">Voltar para o login</a>
             {% if messages %}
