@@ -1,12 +1,12 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from .forms import CustomUserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
 from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
 from .forms import EditUserForm, CustomPasswordChangeForm
+
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -45,6 +45,7 @@ def signup_view(request):
             print("Formulário inválido") 
             print(form.errors)
             error_message = form.errors
+            messages.info(request, 'As senhas não são iguais.')
 
         context = {
             'title': 'Tela de Cadastro',
@@ -54,6 +55,13 @@ def signup_view(request):
             'form': CustomUserCreationForm(),
         }
         return render(request, 'signup.html', context)
+    context = {
+        'title': 'Tela de Cadastro',
+        'register_title': 'Criar Conta',
+        'register_button_text': 'Cadastrar',
+        'form': CustomUserCreationForm(),
+    }
+    return render(request, 'signup.html', context)
 
 @login_required
 def home_view(request):
@@ -83,7 +91,7 @@ def edit_user_view(request):
             messages.success(request, 'Seus dados foram atualizados com sucesso!')
             return redirect('home')
         else:
-            messages.error(request, 'Corrija os erros abaixo.')
+            messages.error(request, 'Por favor, corrija os erros abaixo.')
 
     else:
         user_form = EditUserForm(instance=request.user)
@@ -94,3 +102,17 @@ def edit_user_view(request):
         'password_form': password_form,
     }
     return render(request, 'edit_user.html', context)
+
+@login_required
+def delete_user_view(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    if request.user == user or request.user.is_superuser:
+        print(f"Deletando usuário: {user.username}")
+        user.delete()
+        messages.success(request, 'Usuário deletado com sucesso.')
+    else:
+        print(f"Permissão negada para deletar: {user.username}")
+        messages.error(request, 'Você não tem permissão para deletar este usuário.')
+    
+    return redirect('home')

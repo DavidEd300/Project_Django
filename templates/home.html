@@ -12,16 +12,23 @@
 <body>
     <h1>{{ welcome_message }}</h1>
 
-<p>
-    <a href="{% url 'edit_user' %}" class="btn btn-info">Editar Informações do Usuário</a>
-</p>
+    <p>
+        <a href="{% url 'edit_user' %}" class="btn btn-info">Editar Informações do Usuário</a>
+    </p>
 
-<h2>Lista de Usuários Cadastrados:</h2>
-<ul>
-    {% for user in all_users %}
-        <li>{{ user.username }} - {{ user.email }}</li>
-    {% endfor %}
-</ul>
+    <h2>Lista de Usuários Cadastrados:</h2>
+    <ul class="user-list">
+        {% for user in all_users %}
+            <li class="user-item">
+                <span class="user-info">{{ user.username }} - {{ user.email }}</span>
+                <a href="{% url 'delete_user' user.id %}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja deletar este usuário?');">Deletar</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <p>
+        <a href="{% url 'logout' %}" class="btn btn-warning">Sair</a>
+    </p>
 </body>
-    <a href="{% url 'logout' %}">Sair</a>
+
 </html>
