@@ -1,29 +1,51 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-</head>
-
-<body>
-    <h1>Editar Informações do Usuário</h1>
-
+<link rel="stylesheet" href="{% static 'css/edit_user.css' %}">
+<h3>Alterar Informações do Usuário</h3>
 <form method="POST">
     {% csrf_token %}
-    
-    <h3>Alterar Nome de Usuário e Email</h3>
-    {{ user_form.as_p }}
-    
+
+    <!-- Campo para alterar o nome de usuário -->
+    <div class="form-group">
+        <label for="username">Nome de Usuário:</label>
+        {{ user_form.username }}
+    </div>
+
+    <div class="form-group">
+        <label for="email">E-mail:</label>
+        {{ user_form.email }}
+    </div>
+
     <h3>Alterar Senha</h3>
-    {{ password_form.as_p }}
-    
+
+    <div class="form-group">
+        <label for="old_password">Senha antiga:</label>
+        {{ password_form.old_password }}
+    </div>
+
+    <div class="form-group">
+        <label for="new_password1">Nova senha:</label>
+        {{ password_form.new_password1 }}
+    </div>
+
+    <div class="form-group">
+        <label for="new_password2">Confirmação da nova senha:</label>
+        {{ password_form.new_password2 }}
+    </div>
+
+    <!-- Exibe as mensagens de erro ou observações abaixo do campo de confirmação de senha -->
+    <div class="form-group password-hints">
+        {% for error in password_form.new_password2.errors %}
+            <p class="text-muted">{{ error }}</p>
+        {% endfor %}
+        <ul class="text-muted">
+            <li>Sua senha não pode ser muito parecida com o resto das suas informações pessoais.</li>
+            <li>Sua senha precisa conter pelo menos 8 caracteres.</li>
+            <li>Sua senha não pode ser uma senha comumente utilizada.</li>
+            <li>Sua senha não pode ser inteiramente numérica.</li>
+        </ul>
+    </div>
+
     <button type="submit" class="btn btn-primary">Salvar Alterações</button>
 </form>
 
-</body>
-    <a href="{% url 'home' %}">Voltar</a>
-</html>
+<a href="{% url 'logout' %}">Sair</a>
