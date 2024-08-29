@@ -40,7 +40,7 @@ def signup_view(request):
             user = form.save()
             login(request, user)
 
-            return redirect('home')
+            return redirect('login')
         else:
             print("Formulário inválido") 
             print(form.errors)
