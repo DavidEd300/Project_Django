@@ -1,11 +1,21 @@
 body {
   background-color: #f2f2f2;
   font-family: Arial, sans-serif;
-  margin: 20px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center;     /* Centraliza verticalmente */
+  height: 100vh;           /* Define a altura do body para a altura total da viewport */
+}
+
+.container {
+  width: 80%;
+  max-width: 800px;
+  text-align: center;      /* Centraliza o texto */
 }
 
 h1 {
-  text-align: center;
   margin-bottom: 20px;
 }
 
@@ -16,6 +26,7 @@ h2 {
 .user-list {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .user-item {
@@ -60,19 +71,21 @@ a.btn {
 a.btn:hover {
   opacity: 0.8;
 }
-.btn-link{
-  display: inline-block;     /* Faz o link se comportar como um elemento em linha */
-  padding: 10px 20px;        /* Adiciona espaço interno para dar a aparência de um botão */
-  background-color: #4CAF50; /* Define a cor de fundo do botão */
-  color: white;              /* Define a cor do texto do botão */
-  text-align: center;        /* Centraliza o texto */
-  text-decoration: none;     /* Remove a sublinha dos links */
-  border-radius: 5px;        /* Adiciona bordas arredondadas ao botão */
-  border: none;              /* Remove qualquer borda padrão */
-  cursor: pointer;           /* Mostra o cursor de mão para indicar que é clicável */
-  font-size: 16px;           /* Define o tamanho da fonte */
-  font-family: Arial, sans-serif; /* Define a fonte */
+
+.btn-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
 }
+
 .btn-link:hover {
-  background-color: #45a049; 
+  background-color: #45a049;
 }

@@ -1,10 +1,10 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/edit_user.css' %}">
-<h3>Alterar Informações do Usuário</h3>
 <form method="POST">
     {% csrf_token %}
 
-    <!-- Campo para alterar o nome de usuário -->
+    <div class="login-container">
+        <h3>Alterar Informações do Usuário</h3>
     <div class="form-group">
         <label for="username">Nome de Usuário:</label>
         {{ user_form.username }}
@@ -44,12 +44,18 @@
             <li>Sua senha não pode ser inteiramente numérica.</li>
         </ul>
     </div>
-
+<div class="section-btn">
     <button type="submit" class="btn-link">Salvar Alterações</button>
+    
+    <a href="{% url 'home' %}" class="btn-link"> voltar</a>
+    <a href="{% url 'logout' %}"class="btn-link">Sair</a>
+    
+</div>
+</div>
+
 </form>
 
-<a href="{% url 'logout' %}"class="btn-link">Sair</a>
-<a href="{% url 'home' %}" class="btn-link"> voltar</a>
+
 {% if messages %}
             {% for message in messages %}
                 <p style="color: red;">{{ message }}</p>
