@@ -12,13 +12,13 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 class CustomUserCreationForm(forms.ModelForm):
     password = forms.CharField(label='form-senha', widget=forms.PasswordInput)
-    confirm_password = forms.CharField(label='confirm-password',
-                                       widget=forms.PasswordInput)
+    confirm_password = forms.CharField(label='confirm-password',widget=forms.PasswordInput)
     email = forms.EmailField(required=True)
+    is_superuser = forms.BooleanField(required=False, label='É Superusuário?')
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'confirm_password')
+        fields = ('username', 'email', 'password', 'confirm_password','is_superuser')
 
     def clean_confirm_password(self):
         password = self.cleaned_data.get('password')
@@ -30,10 +30,12 @@ class CustomUserCreationForm(forms.ModelForm):
         return confirm_password
 
     def save(self, commit=True):
-        print("Salvando usuário...")
         user = super().save(commit=False)
         user.email = self.cleaned_data['email']
         user.password = make_password(self.cleaned_data['password'])
+        if self.cleaned_data.get('is_superuser'):
+            user.is_superuser = True
+            user.is_staff = True  # Necessário para superusuários
         if commit:
             user.save()
         return user

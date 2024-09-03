@@ -19,12 +19,10 @@ def login_view(request):
             login(request, user)
             return redirect('home')
         else:
-            # Verifica se o usuário já está cadastrado
             if not User.objects.filter(username=username).exists():
                 messages.error(request, 'Usuário não cadastrado.')
             else:
                 messages.error(request, 'Senha inválida.')
-            
     context = {
         'title': 'Tela de Login',
         'login_title': 'Bem-vindo',
@@ -36,25 +34,32 @@ def signup_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            print("Formulário válido") 
-            user = form.save()
+            print("Formulário válido")
+            
+            # Salva o usuário sem comitar ao banco de dados
+            user = form.save(commit=False)
+            
+            # Define as propriedades adicionais para superusuário, se necessário
+            if form.cleaned_data.get('is_superuser'):
+                user.is_superuser = True
+                user.is_staff = True  # Necessário para superusuários
+                
+            # Salva o usuário no banco de dados
+            user.save()  # Salva o objeto para garantir que ele tenha uma chave primária
+            
+            # Faz login do usuário após o cadastro
             login(request, user)
-
+            
+            messages.success(request, 'Cadastro realizado com sucesso! Faça login.')
             return redirect('login')
         else:
-            print("Formulário inválido") 
+            print("Formulário inválido")
             print(form.errors)
-            error_message = form.errors
-            messages.info(request, 'As senhas não são iguais.')
 
-        context = {
-            'title': 'Tela de Cadastro',
-            'register_title': 'Criar Conta',
-            'register_button_text': 'Cadastrar',
-            'error_message': error_message,
-            'form': CustomUserCreationForm(),
-        }
+        
         return render(request, 'signup.html', context)
+
+    # Renderiza o formulário vazio na primeira carga
     context = {
         'title': 'Tela de Cadastro',
         'register_title': 'Criar Conta',

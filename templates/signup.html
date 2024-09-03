@@ -13,28 +13,68 @@
         <h2>{{ register_title }}</h2>
         <form method="post">
             {% csrf_token %}
+
+            <!-- Nome de Usuário -->
             <div class="form-group">
                 <label for="username">Nome de Usuário</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" required value="{{ form.username.value|default_if_none:'' }}">
+                {% if form.username.errors %}
+                    <div class="error-message">
+                        {{ form.username.errors }}
+                    </div>
+                {% endif %}
             </div>
+
+            <!-- Email -->
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" required value="{{ form.email.value|default_if_none:'' }}">
+                {% if form.email.errors %}
+                    <div class="error-message">
+                        {{ form.email.errors }}
+                    </div>
+                {% endif %}
             </div>
+
+            <!-- Senha -->
             <div class="form-group">
                 <label for="form-senha">Senha</label>
                 <input type="password" id="senha" name="password" required>
+                {% if form.password.errors %}
+                    <div class="error-message">
+                        {{ form.password.errors }}
+                    </div>
+                {% endif %}
             </div>
+
+            <!-- Confirme a Senha -->
             <div class="form-group">
                 <label for="confirm-password">Confirme a Senha</label>
                 <input type="password" id="confirmarSenha" name="confirm_password" required>
+                {% if form.confirm_password.errors %}
+                    <div class="error-message">
+                        {{ form.confirm_password.errors }}
+                    </div>
+                {% endif %}
             </div>
+
+            <!-- Superusuário -->
             <div class="checkbox">
                 <label for="is_superuser">É Superusuário?</label>
-                <input type="checkbox" id="is_superuser" name="is_superuser">
+                <input type="checkbox" id="is_superuser" name="is_superuser" {% if form.is_superuser.value %}checked{% endif %}>
             </div>
+
             <button type="submit" id="register-btn">{{ register_button_text }}</button>
-            <a href="{% url 'login' %}"class="btn-link">Voltar para o login</a>
+            <a href="{% url 'login' %}" class="btn-link">Voltar para o login</a>
+
+            <!-- Exibe erros gerais do formulário -->
+            {% if form.non_field_errors %}
+                <div class="error-message">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <!-- Exibe mensagens do Django -->
             {% if messages %}
                 {% for message in messages %}
                     <p style="color: red;">{{ message }}</p>
