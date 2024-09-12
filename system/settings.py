@@ -1,3 +1,4 @@
+import dj_database_url
 import os
 from pathlib import Path
 
@@ -56,17 +57,9 @@ WSGI_APPLICATION = 'system.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bd_01',
-        'USER': 'root',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',  # Or your IP or domain if using a remote server
-        'PORT': '3306',
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-        },
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL', 'mysql://root:admin@localhost:3306/bd_01')
+    )
 }
 
 
