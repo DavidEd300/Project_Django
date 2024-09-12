@@ -24,6 +24,13 @@
         </div>
         <button type="submit" id="btn-login">Entrar</button>
         <a class="cadastro" href="{% url 'signup' %}">Cadastre-se</a>
+        <p>
+           {% if messages %}
+                {% for message in messages %}
+                    <p style="color: red;">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        </p>
     </form>
 </div>
 </body>
