@@ -8,7 +8,7 @@ SECRET_KEY = 'django-insecure-tl!-3&+fytp%cn++dy018-s4yfte@(dv&$vn_c71@!i*=q@%m@
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['sistema-loginn-98d9a9b46260.herokuapp.com']
 
 
 INSTALLED_APPS = [
