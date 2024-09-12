@@ -1,3 +1,7 @@
+# Certifique-se de que o formulário está importado corretamente
+from .forms import CustomUserCreationForm
+from django.contrib.auth import login
+from django.shortcuts import render, redirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from .forms import CustomUserCreationForm
@@ -39,7 +43,7 @@ def signup_view(request):
 
             if form.cleaned_data.get('is_superuser'):
                 user.is_superuser = True
-                user.is_staff = True  # Necessário para superusuários
+                user.is_staff = True
 
             user.save()
 
@@ -52,7 +56,13 @@ def signup_view(request):
             print("Formulário inválido")
             print(form.errors)
 
-        return render(request, 'signup.html', context)
+            context = {
+                'title': 'Tela de Cadastro',
+                'register_title': 'Criar Conta',
+                'register_button_text': 'Cadastrar',
+                'form': form,
+            }
+            return render(request, 'signup.html', context)
 
     context = {
         'title': 'Tela de Cadastro',
