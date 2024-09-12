@@ -6,27 +6,28 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
 
 
-
 from django.contrib.auth.forms import PasswordChangeForm
 
 
 class CustomUserCreationForm(forms.ModelForm):
     password = forms.CharField(label='form-senha', widget=forms.PasswordInput)
-    confirm_password = forms.CharField(label='confirm-password',widget=forms.PasswordInput)
+    confirm_password = forms.CharField(
+        label='confirm-password', widget=forms.PasswordInput)
     email = forms.EmailField(required=True)
     is_superuser = forms.BooleanField(required=False, label='É Superusuário?')
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'confirm_password','is_superuser')
+        fields = ('username', 'email', 'password',
+                  'confirm_password', 'is_superuser')
 
     def clean_confirm_password(self):
         password = self.cleaned_data.get('password')
         confirm_password = self.cleaned_data.get('confirm_password')
-        
+
         if password and confirm_password and password != confirm_password:
             raise forms.ValidationError("As senhas não coincidem")
-            
+
         return confirm_password
 
     def save(self, commit=True):
@@ -48,14 +49,19 @@ class EditUserForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EditUserForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({'placeholder': 'Novo nome de usuário'})
+        self.fields['username'].widget.attrs.update(
+            {'placeholder': 'Novo nome de usuário'})
         self.fields['email'].widget.attrs.update({'placeholder': 'Novo email'})
         self.fields['username'].widget.attrs.update({'class': 'form-control'})
         self.fields['email'].widget.attrs.update({'class': 'form-control'})
 
+
 class CustomPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super(CustomPasswordChangeForm, self).__init__(*args, **kwargs)
-        self.fields['old_password'].widget.attrs.update({'placeholder': 'Senha atual', 'class': 'form-control'})
-        self.fields['new_password1'].widget.attrs.update({'placeholder': 'Nova senha', 'class': 'form-control'})
-        self.fields['new_password2'].widget.attrs.update({'placeholder': 'Confirme a nova senha', 'class': 'form-control'})
+        self.fields['old_password'].widget.attrs.update(
+            {'placeholder': 'Senha atual', 'class': 'form-control'})
+        self.fields['new_password1'].widget.attrs.update(
+            {'placeholder': 'Nova senha', 'class': 'form-control'})
+        self.fields['new_password2'].widget.attrs.update(
+            {'placeholder': 'Confirme a nova senha', 'class': 'form-control'})

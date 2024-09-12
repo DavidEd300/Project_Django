@@ -7,7 +7,6 @@ from django.contrib import messages
 from .forms import EditUserForm, CustomPasswordChangeForm
 
 
-
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -35,31 +34,26 @@ def signup_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             print("Formulário válido")
-            
-            # Salva o usuário sem comitar ao banco de dados
+
             user = form.save(commit=False)
-            
-            # Define as propriedades adicionais para superusuário, se necessário
+
             if form.cleaned_data.get('is_superuser'):
                 user.is_superuser = True
                 user.is_staff = True  # Necessário para superusuários
-                
-            # Salva o usuário no banco de dados
-            user.save()  # Salva o objeto para garantir que ele tenha uma chave primária
-            
-            # Faz login do usuário após o cadastro
+
+            user.save()
+
             login(request, user)
-            
-            messages.success(request, 'Cadastro realizado com sucesso! Faça login.')
+
+            messages.success(
+                request, 'Cadastro realizado com sucesso! Faça login.')
             return redirect('login')
         else:
             print("Formulário inválido")
             print(form.errors)
 
-        
         return render(request, 'signup.html', context)
 
-    # Renderiza o formulário vazio na primeira carga
     context = {
         'title': 'Tela de Cadastro',
         'register_title': 'Criar Conta',
@@ -67,6 +61,7 @@ def signup_view(request):
         'form': CustomUserCreationForm(),
     }
     return render(request, 'signup.html', context)
+
 
 @login_required
 def home_view(request):
@@ -78,22 +73,27 @@ def home_view(request):
     }
     return render(request, 'home.html', context)
 
+
 def logout_view(request):
     logout(request)
     messages.info(request, 'Você foi desconectado.')
     return redirect('login')
 
+
 @login_required
 def edit_user_view(request):
     if request.method == 'POST':
         user_form = EditUserForm(request.POST, instance=request.user)
-        password_form = CustomPasswordChangeForm(user=request.user, data=request.POST)
+        password_form = CustomPasswordChangeForm(
+            user=request.user, data=request.POST)
 
         if user_form.is_valid() and password_form.is_valid():
             user_form.save()
             password_form.save()
-            update_session_auth_hash(request, password_form.user)  # Mantém o usuário logado após mudar a senha
-            messages.success(request, 'Seus dados foram atualizados com sucesso!')
+            # Mantém o usuário logado após mudar a senha
+            update_session_auth_hash(request, password_form.user)
+            messages.success(
+                request, 'Seus dados foram atualizados com sucesso!')
             return redirect('home')
         else:
             messages.error(request, 'Por favor, corrija os erros abaixo.')
@@ -108,6 +108,7 @@ def edit_user_view(request):
     }
     return render(request, 'edit_user.html', context)
 
+
 @login_required
 def delete_user_view(request, user_id):
     user = get_object_or_404(User, id=user_id)
@@ -118,6 +119,7 @@ def delete_user_view(request, user_id):
         messages.success(request, 'Usuário deletado com sucesso.')
     else:
         print(f"Permissão negada para deletar: {user.username}")
-        messages.error(request, 'Você não tem permissão para deletar este usuário.')
-    
+        messages.error(
+            request, 'Você não tem permissão para deletar este usuário.')
+
     return redirect('home')

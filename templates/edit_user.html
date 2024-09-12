@@ -32,7 +32,6 @@
         {{ password_form.new_password2 }}
     </div>
 
-    <!-- Exibe as mensagens de erro ou observações abaixo do campo de confirmação de senha -->
     <div class="form-group password-hints">
         {% for error in password_form.new_password2.errors %}
             <p class="text-muted">{{ error }}</p>
